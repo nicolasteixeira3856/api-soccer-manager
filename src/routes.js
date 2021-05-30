@@ -37,4 +37,20 @@ routes.delete("/teams/:id", (req, res) => {
 	}
 });
 
+routes.put("/teams/:id", (req, res) => {
+	if (isNaN(req.params.id)) {
+		res.sendStatus(400);
+	} else {
+		const id = parseInt(req.params.id);
+		const index = DB.teams.findIndex((c) => c.id == id);
+		if (index == -1) {
+			res.status(404).json({ msg: "Time não existe." });
+		} else {
+			console.log(index)
+			DB.teams.splice(index, 1, req.body);
+			res.status(200).json({msg: "Time atualizado com sucesso"});
+		}
+	}
+});
+
 module.exports = routes;
