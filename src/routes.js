@@ -31,7 +31,7 @@ routes.delete("/teams/:id", (req, res) => {
 			res.status(404).json({ msg: "Time não existe." });
 		} else {
 			console.log(index)
-			DB.teams.splice(index, 1);
+			DB.teams.splice(index, 1,null);
 			res.status(200).json({ msg: "Time excluído." });
 		}
 	}
@@ -51,6 +51,48 @@ routes.put("/teams/:id", (req, res) => {
 			res.status(200).json({msg: "Time atualizado com sucesso"});
 		}
 	}
+});
+
+routes.post("/newTeam", (req,res) => {
+  const {
+	name,
+	city,
+	state,
+	series,
+	titles,
+	payment,
+  } = req.body;
+  if (name && city && state && titles && payment != undefined){
+		const id = DB.teams.length + 1;
+	
+		DB.teams.push({
+			id,
+			name,
+			city,
+			state,
+			series,
+			titles,
+			payment,
+		});
+		  res.status(200).json({ msg: "Inserido com sucesso" });
+		} else {
+			if(name == undefined){ 
+			res.status(400).json({ msg: "Campo nome não pode ser nulo" });
+			}
+			if(city == undefined){ 
+			res.status(400).json({ msg: "Campo cidade não pode ser nulo" });
+			}
+			if(state == undefined){ 
+			res.status(400).json({ msg:  "Campo estado não pode ser nulo" });
+			}
+			if(titles == undefined){ 
+				res.status(400).json({ msg:  " Campo titulo não podem ser nulo" });
+			}
+		    if(payment == undefined){ 
+				res.status(400).json({ msg: "Campo pagamento não pode ser nulo" });
+				}	
+	
+  }
 });
 
 module.exports = routes;
